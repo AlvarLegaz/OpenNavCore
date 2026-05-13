@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rover Raspberry Pi</title>
+  <style>
+    body{font-family:system-ui,Arial,sans-serif;margin:0;background:#101820;color:#f5f7fa}main{max-width:980px;margin:auto;padding:24px}.card{background:#182635;border:1px solid #2b4157;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 10px 30px #0004}a,button{color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.btn{display:inline-block;background:#2563eb;padding:10px 14px;border-radius:12px;text-decoration:none;margin:4px 6px 4px 0}.danger{background:#9333ea}pre{white-space:pre-wrap;background:#0b121a;border-radius:12px;padding:12px;overflow:auto}img{width:100%;border-radius:14px;border:1px solid #2b4157}.muted{color:#aab7c4}</style>
+</head>
+<body>
+<main>
+  <h1>Rover Raspberry Pi</h1>
+  <p class="muted">Port del proyecto ESP32-CAM a Raspberry Pi + Camera Module 3.</p>
+  <div class="card">
+    <h2>Accesos rápidos</h2>
+    <a class="btn" href="/stream_low">Stream baja latencia</a>
+    <a class="btn" href="/stream">Stream alta calidad</a>
+    <a class="btn" href="/capture">Captura JPEG</a>
+    <a class="btn" href="/telemetry">Telemetría JSON</a>
+    <a class="btn" href="/config">Config</a>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>Sistema</h3><pre id="system">Cargando...</pre></div>
+    <div class="card"><h3>GPS</h3><pre id="gps">Cargando...</pre></div>
+    <div class="card"><h3>IMU</h3><pre id="imu">Cargando...</pre></div>
+  </div>
+  <div class="card">
+    <h2>Luces</h2>
+    <button class="btn" onclick="fetch('/luces/on').then(refresh)">Encender</button>
+    <button class="btn danger" onclick="fetch('/luces/off').then(refresh)">Apagar</button>
+    <pre id="gpio">Cargando...</pre>
+  </div>
+</main>
+<script>
+async function load(id, url){
+  try{ const r=await fetch(url); document.getElementById(id).textContent=JSON.stringify(await r.json(),null,2); }
+  catch(e){ document.getElementById(id).textContent=e; }
+}
+function refresh(){ load('system','/system'); load('gps','/gps'); load('imu','/imu'); load('gpio','/gpio'); }
+refresh(); setInterval(refresh, 1500);
+</script>
+</body>
+</html>

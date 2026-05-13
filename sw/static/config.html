@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Config Rover</title>
+<style>body{font-family:system-ui;max-width:760px;margin:auto;padding:24px;background:#101820;color:white}.card{background:#182635;padding:18px;border-radius:16px}code{background:#0b121a;padding:2px 6px;border-radius:6px}a{color:#93c5fd}</style></head>
+<body>
+<h1>Configuración</h1>
+<div class="card">
+<p>En la versión ESP32 se guardaba WiFi en flash desde la web.</p>
+<p>En Raspberry es mejor configurar la red con <code>raspi-config</code>, NetworkManager o el escritorio de Raspberry Pi OS.</p>
+<p>La configuración del rover está en el archivo <code>config.py</code>:</p>
+<ul>
+<li>Puerto GPS: <code>/dev/serial0</code></li>
+<li>I2C: bus <code>1</code></li>
+<li>Luces: GPIO BCM <code>17</code></li>
+<li>Servidor: puerto <code>8000</code></li>
+</ul>
+<p><a href="/info">Volver</a></p>
+</div>
+</body></html>

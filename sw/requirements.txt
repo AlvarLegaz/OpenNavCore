@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+pyserial
+smbus2
+gpiozero
+adafruit-blinka
+adafruit-circuitpython-bmp280
