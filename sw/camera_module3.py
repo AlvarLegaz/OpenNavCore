@@ -13,8 +13,10 @@ try:
     from picamera2 import Picamera2
     from picamera2.encoders import JpegEncoder
     from picamera2.outputs import FileOutput
+    from libcamera import Transform
 except Exception:  # pragma: no cover
     Picamera2 = None
+    Transform = None
 
 
 class StreamingOutput(io.BufferedIOBase):
@@ -30,13 +32,14 @@ class StreamingOutput(io.BufferedIOBase):
 
 
 class CameraModule3:
-    def __init__(self, high_size=(1280, 720), low_size=(640, 360), high_fps=10, low_fps=12, jpeg_quality_high=80, jpeg_quality_low=65):
+    def __init__(self, high_size=(1280, 720), low_size=(640, 360), high_fps=10, low_fps=12, jpeg_quality_high=80, jpeg_quality_low=65, rotate_180=False):
         self.high_size = high_size
         self.low_size = low_size
         self.high_fps = high_fps
         self.low_fps = low_fps
         self.jpeg_quality_high = jpeg_quality_high
         self.jpeg_quality_low = jpeg_quality_low
+        self.rotate_180 = rotate_180
         self._lock = threading.RLock()
         self._picam2 = None
         self._output: Optional[StreamingOutput] = None
@@ -76,11 +79,18 @@ class CameraModule3:
         except Exception:
             pass
 
-        config = self._picam2.create_video_configuration(
-            main={"size": size},
-            controls={"FrameRate": float(fps)},
-            buffer_count=2 if mode == "low" else 3,
-        )
+        video_config_kwargs = {
+            "main": {"size": size},
+            "controls": {"FrameRate": float(fps)},
+            "buffer_count": 2 if mode == "low" else 3,
+        }
+        if self.rotate_180:
+            if Transform is None:
+                raise RuntimeError("No se puede rotar la cámara: falta libcamera.Transform")
+            # Rotar 180° equivale a aplicar flip horizontal + vertical.
+            video_config_kwargs["transform"] = Transform(hflip=True, vflip=True)
+
+        config = self._picam2.create_video_configuration(**video_config_kwargs)
         self._picam2.configure(config)
         self._picam2.start()
         time.sleep(0.25)
@@ -130,4 +140,4 @@ class CameraModule3:
         return self._output.frame
 
     def status(self) -> dict:
-        return {"ok": self.ok, "mode": self.mode, "error": self.error, "high_size": self.high_size, "low_size": self.low_size}
+        return {"ok": self.ok, "mode": self.mode, "error": self.error, "high_size": self.high_size, "low_size": self.low_size, "rotate_180": self.rotate_180}

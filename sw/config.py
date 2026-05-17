@@ -13,6 +13,7 @@ class CameraConfig:
     low_fps: int = 12
     jpeg_quality_high: int = 80
     jpeg_quality_low: int = 65
+    rotate_180: bool = True
 
 
 @dataclass(frozen=True)
