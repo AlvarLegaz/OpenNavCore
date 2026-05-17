@@ -2,7 +2,7 @@
 set -e
 cd "$(dirname "$0")"
 
-echo "== Rover Raspberry Pi: instalación =="
+echo "== OpenNavCore Raspberry Pi: instalación =="
 echo "Actualizando paquetes..."
 sudo apt update
 
