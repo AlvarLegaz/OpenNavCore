@@ -5,39 +5,6 @@
 El proyecto nace como evolución de un sistema de telemetría y vídeo para rover, pero está diseñado para no depender de un único tipo de vehículo. La idea principal es separar claramente el control del hardware de la comunicación con el exterior.
 
 ---
-## Arrancar el servidor a mano
-
-Entra en la carpeta:
-
-```bash
-cd /home/pi/rover_rpi
-```
-
-Activa el entorno:
-
-```bash
-source .venv/bin/activate
-```
-
-Arranca:
-
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-Ahora abre en tu navegador:
-
-```text
-http://IP_DE_TU_RASPBERRY:8000
-```
-
-Ejemplo:
-
-```text
-http://192.168.1.50:8000
-```
-
----
 
 ## Idea principal
 
